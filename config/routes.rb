@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
 
-get '/hello_world/'      => 'application#hello_world'
-get '/hello/:name'  => 'application#hello_world'
+get '/hello_world'      => 'application#hello_world'
+get '/hello/:name'      => 'application#hello_world'
+get '/new_post'         => 'application#new_post'
+post '/create_post'     => 'application#create_post'
+get '/list_posts'       => 'application#list_posts'
+get '/show_post/:id'    => 'application#show_post'
+get '/edit_post/:id'    => 'application#edit_post'
+post '/update_post/:id' => 'application#update_post' 
+post '/delete_post/:id' => 'application#delete_post' 
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
