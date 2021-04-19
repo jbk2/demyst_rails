@@ -30,8 +30,7 @@ class ApplicationController < ActionController::Base
 
 	def show_post
  		post = Post.find(params['id'])
- 		comments = connection.execute('SELECT * FROM comments WHERE comments.post_id = ?', params['id'])
- 		render 'application/show_post', locals: { post: post, comments: comments }
+ 		render 'application/show_post', locals: { post: post }
 	end
 
 	def edit_post

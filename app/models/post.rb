@@ -13,8 +13,6 @@ class Post
     @errors.empty?
 	end
 
-
-
 	def new_record?
 		id.nil?
 	end
@@ -89,6 +87,14 @@ class Post
  		db_connection.results_as_hash = true
  		db_connection
 	end
+
+	def comments
+		comment_hashes = connection.execute('SELECT * FROM comments WHERE comments.post_id = ?', id)
+		comment_hashes.map do |comment_hash|
+			Comment.new(comment_hash)
+		end
+	end 
+
 
 	def connection
 		self.class.connection
