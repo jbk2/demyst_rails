@@ -6,6 +6,14 @@ class Post
 		@errors = {}
 	end
 	
+	def set_attributes(attributes)
+		@id					= attributes['id'] if new_record?
+		@title			= attributes['title']
+		@body				=	attributes['body']
+		@author			=	attributes['author']
+		@created_at	||=	attributes['created_at']
+	end
+
 	def valid?
 		@errors['title']  = "can't be blank" if title.blank?
     @errors['body']   = "can't be blank" if body.blank?
@@ -62,13 +70,6 @@ class Post
 		connection.execute("DELETE FROM posts WHERE posts.id = ?", id)
 	end
 
-	def set_attributes(attributes)
-		@id					= attributes['id'] if new_record?
-		@title			= attributes['title']
-		@body				=	attributes['body']
-		@author			=	attributes['author']
-		@created_at	||=	attributes['created_at']
-	end
 
 	def self.find(id)
 		post_hash = connection.execute("SELECT * FROM posts WHERE posts.id = ? LIMIT 1", id).first
@@ -94,6 +95,15 @@ class Post
 			Comment.new(comment_hash)
 		end
 	end 
+	
+	def build_comment(attributes)
+		Comment.new(attributes.merge!('post_id' => id))
+	end
+
+	def create_comment(attributes)
+		comment = build_comment(attributes)
+		comment.save
+	end
 
 
 	def connection
