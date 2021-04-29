@@ -1,8 +1,9 @@
-class Post
-	attr_reader :id, :title, :body, :author, :created_at, :errors
+class Post < BaseModel
+	attr_reader :id, :title, :body, :author, :created_at, :errors, :comments
 
 	def initialize(attributes={})
 		set_attributes(attributes)
+		# binding.pry
 		@errors = {}
 	end
 	
@@ -21,21 +22,12 @@ class Post
     @errors.empty?
 	end
 
-	def new_record?
-		id.nil?
-	end
-
-	def save
-		return false unless valid?
-		
-		if new_record?
-			insert
-		else
-			update
+	def comments
+		comment_hashes = connection.execute('SELECT * FROM comments WHERE comments.post_id = ?', id)
+		comment_hashes.map do |comment_hash|
+			Comment.new(comment_hash)
 		end
-		
-		true
-	end
+	end 
 
 	def insert
 		insert_query = <<-SQL
@@ -66,36 +58,6 @@ class Post
 			id
 	end
 
-	def destroy
-		connection.execute("DELETE FROM posts WHERE posts.id = ?", id)
-	end
-
-
-	def self.find(id)
-		post_hash = connection.execute("SELECT * FROM posts WHERE posts.id = ? LIMIT 1", id).first
-		Post.new(post_hash)
-	end
-
-	def self.all
-		post_hashes = connection.execute("SELECT * FROM posts")
-		post_hashes.map do |post_hash|
-			Post.new(post_hash)
-		end
-	end
-
-	def self.connection
-		db_connection = SQLite3::Database.new('db/development.sqlite3')
- 		db_connection.results_as_hash = true
- 		db_connection
-	end
-
-	def comments
-		comment_hashes = connection.execute('SELECT * FROM comments WHERE comments.post_id = ?', id)
-		comment_hashes.map do |comment_hash|
-			Comment.new(comment_hash)
-		end
-	end 
-	
 	def build_comment(attributes)
 		Comment.new(attributes.merge!('post_id' => id))
 	end
@@ -105,8 +67,51 @@ class Post
 		comment.save
 	end
 
+	def delete_comment(comment_id)
+		Comment.find(comment_id).destroy
+	end
 
 	def connection
 		self.class.connection
 	end
+
+	def destroy
+		connection.execute("DELETE FROM posts WHERE posts.id = ?", id)
+	end
+
+	# def self.find(id)
+	# 	post_hash = connection.execute("SELECT * FROM posts WHERE posts.id = ? LIMIT 1", id).first
+	# 	Post.new(post_hash)
+	# end
+
+	# def self.all
+	# 	post_hashes = connection.execute("SELECT * FROM posts")
+	# 	post_hashes.map do |post_hash|
+	# 		Post.new(post_hash)
+	# 	end
+	# end
+
+	# def self.connection
+	# 	db_connection = SQLite3::Database.new('db/development.sqlite3')
+ # 		db_connection.results_as_hash = true
+ # 		db_connection
+	# end
+
+	
+	# def new_record?
+	# 	id.nil?
+	# end
+
+	# def save
+	# 	return false unless valid?
+		
+	# 	if new_record?
+	# 		insert
+	# 	else
+	# 		update
+	# 	end
+		
+	# 	true
+	# end
+
 end

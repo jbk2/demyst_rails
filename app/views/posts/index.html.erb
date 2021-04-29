@@ -1,0 +1,34 @@
+<html>
+	<body>
+		
+		<div>
+			<% @posts.each do |post| %>
+				
+				<div class="post">
+					
+					<h2 class="title">
+						<%= link_to post.title, post_path(post.id) %>
+					</h2>
+
+					<small class="meta">
+						<span class="author">by <%= post.author %> - </span>
+						<em class="created_at"><%= post.created_at %></em>
+		 				
+						<%= link_to 'Edit', edit_post_path(post.id) %>
+
+			 			<%= form_tag post_path(post.id), method: "delete", style: "display: inline" do %>
+  						<%= submit_tag "Delete" %>
+						<% end %>
+
+					</form>
+					</small>
+				
+				</div>
+			
+			<% end %>
+			<br>
+			<%= link_to 'New post', new_post_path %>
+		</div>
+
+	</body>
+</html>

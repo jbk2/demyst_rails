@@ -14,6 +14,27 @@
 			<% end %>
 		</div>
 
+
+		<%= form_for url_for(action: 'update'), method: 'patch' do %>
+
+			<%= label_tag 'Title' %>
+			<%= text_area_tag 'title', @post.title %>
+			<br><br>
+
+			<%= label_tag 'Body' %>
+			<%= text_field_tag 'body', @post.body %>
+			<br><br>
+
+			<%= label_tag 'Author' %>
+			<%= text_area_tag 'author', @post.author %>
+			<br><br>
+
+			<%= submit_tag 'Update post' %>
+
+		<% end %>
+
+
+
 		<form method='post' action="/update_post/<%= post.id %>">
 			
 			<label for='title'>Title</label>
@@ -33,7 +54,8 @@
 		</form>
 
 		<br><br>
-		<a href="/list_posts">Posts index</a>
+		<%= link_to 'Posts index', posts_path %>
+		<!-- <a href="/list_posts">Posts index</a> -->
 
 	</body>
 </html>
