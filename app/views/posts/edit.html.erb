@@ -7,7 +7,7 @@
 	<body>
 
 		<div class="errors">
-			<% post.errors.each do |attribute, error| %>
+			<% @post.errors.each do |attribute, error| %>
 				<p class="error" style="color: orange">
 					<%= attribute %>: <%= error %>
 				</p>
@@ -15,45 +15,24 @@
 		</div>
 
 
-		<%= form_for url_for(action: 'update'), method: 'patch' do %>
+		<%= form_tag url_for(action: 'update'), method: "patch" do %>
 
 			<%= label_tag 'Title' %>
-			<%= text_area_tag 'title', @post.title %>
+			<%= text_field_tag 'title', @post.title %>
 			<br><br>
 
 			<%= label_tag 'Body' %>
-			<%= text_field_tag 'body', @post.body %>
+			<%= text_area_tag 'body', @post.body %>
 			<br><br>
 
 			<%= label_tag 'Author' %>
-			<%= text_area_tag 'author', @post.author %>
+			<%= text_field_tag 'author', @post.author %>
 			<br><br>
 
 			<%= submit_tag 'Update post' %>
 
 		<% end %>
 
-
-
-		<form method='post' action="/update_post/<%= post.id %>">
-			
-			<label for='title'>Title</label>
-			<input id='title' name='title' type='text' value="<%= post.title %>"/>
-			<br><br>
-
-			<label for='body'>Body</label>
-			<textarea id='body' name='body'><%= post.body %></textarea>
-			<br><br>
-
-			<label for='author'>Author</label>
-			<input id='author' name='author' type='text' value="<%= post.author %>"/>
-			<br><br>
-
-			<input type="submit" value="Update post">
-
-		</form>
-
-		<br><br>
 		<%= link_to 'Posts index', posts_path %>
 		<!-- <a href="/list_posts">Posts index</a> -->
 

@@ -12,7 +12,7 @@
       </small>
 
       <p class="body"><%= @post.body %></p>
-      <a href="/list_posts/">Posts index</a>
+      <%= link_to "Posts index", posts_path %>
 
       <div class="comments">
         <!-- Display each comment -->
@@ -28,7 +28,7 @@
             <br>
 
             <!-- Delete comment link -->
-            <%= link_to 'Delete', post_path(post.id), method: :delete, data: { confirm: "Are you sure want to delete '#{post.title}'?"} %>
+            <%= link_to 'Delete', post_path(@post.id), method: :delete, data: { confirm: "Are you sure want to delete '#{@post.title}'?"} %>
             <hr>
           </div>
           <hr>
@@ -45,7 +45,7 @@
         
         <!-- Create comment form -->
         <div>
-          <%= form_tag post_comments_path(@post) do %>
+          <%= form_tag post_comments_path(@post.id) do %>
 
           <%= label_tag 'Comment' %>
           <%= text_area_tag "comment[body]", @comment.body %>
