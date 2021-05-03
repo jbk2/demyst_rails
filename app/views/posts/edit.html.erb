@@ -1,40 +1,8 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>Head title here</title>
-	</head>
-	
-	<body>
+<body>
 
-		<div class="errors">
-			<% @post.errors.each do |attribute, error| %>
-				<p class="error" style="color: orange">
-					<%= attribute %>: <%= error %>
-				</p>
-			<% end %>
-		</div>
+	<%= render "shared/errors", obj: @post %>
+	<%= render "form" %>
+	<br>
+	<%= link_to 'Posts index', posts_path %>
 
-
-		<%= form_tag url_for(action: 'update'), method: "patch" do %>
-
-			<%= label_tag 'Title' %>
-			<%= text_field_tag 'title', @post.title %>
-			<br><br>
-
-			<%= label_tag 'Body' %>
-			<%= text_area_tag 'body', @post.body %>
-			<br><br>
-
-			<%= label_tag 'Author' %>
-			<%= text_field_tag 'author', @post.author %>
-			<br><br>
-
-			<%= submit_tag 'Update post' %>
-
-		<% end %>
-
-		<%= link_to 'Posts index', posts_path %>
-		<!-- <a href="/list_posts">Posts index</a> -->
-
-	</body>
-</html>
+</body>
